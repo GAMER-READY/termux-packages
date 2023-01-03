@@ -2,9 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://mariadb.org
 TERMUX_PKG_DESCRIPTION="A drop-in replacement for mysql server"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=2:10.9.4
-TERMUX_PKG_SRCURL=http://ftp.hosteurope.de/mirror/archive.mariadb.org/mariadb-${TERMUX_PKG_VERSION:2}/source/mariadb-${TERMUX_PKG_VERSION:2}.tar.gz
-TERMUX_PKG_SHA256=1dff08a0f37ea5cf8f00cbd12d40e80759fae7d73184ccf56b5b51acfdcfc054
+TERMUX_PKG_VERSION=2:10.10.2
+TERMUX_PKG_SRCURL=https://mirror.netcologne.de/mariadb/mariadb-${TERMUX_PKG_VERSION#*:}/source/mariadb-${TERMUX_PKG_VERSION#*:}.tar.gz
+TERMUX_PKG_SHA256=57cbd0112b22b592f657cd4eb82e2f36ad901351317bf8e17849578e803f3cb2
 TERMUX_PKG_DEPENDS="libandroid-support, libc++, libcrypt, libedit, liblz4, liblzma, ncurses, openssl, pcre2, zlib"
 TERMUX_PKG_BREAKS="mariadb-dev"
 TERMUX_PKG_REPLACES="mariadb-dev"
@@ -91,6 +91,7 @@ termux_step_pre_configure() {
 
 	sed -i 's/^\s*END[(][)]/ENDIF()/g' $TERMUX_PKG_SRCDIR/libmariadb/cmake/ConnectorName.cmake
 
+	export PATH=$TERMUX_PKG_HOSTBUILD_DIR/strings:$PATH
 }
 
 termux_step_post_massage() {
@@ -101,7 +102,7 @@ termux_step_create_debscripts() {
 	echo "if [ ! -e "$TERMUX_PREFIX/var/lib/mysql" ]; then" > postinst
 	echo "  echo 'Initializing mysql data directory...'" >> postinst
 	echo "  mkdir -p $TERMUX_PREFIX/var/lib/mysql" >> postinst
-	echo "  $TERMUX_PREFIX/bin/mysql_install_db --user=\$(whoami) --datadir=$TERMUX_PREFIX/var/lib/mysql --basedir=$TERMUX_PREFIX" >> postinst
+	echo "  $TERMUX_PREFIX/bin/mysql_install_db --user=root --auth-root-authentication-method=normal --datadir=$TERMUX_PREFIX/var/lib/mysql --basedir=$TERMUX_PREFIX" >> postinst
 	echo "fi" >> postinst
 	echo "exit 0" >> postinst
 	chmod 0755 postinst

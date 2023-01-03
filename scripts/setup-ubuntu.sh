@@ -123,7 +123,10 @@ PACKAGES+=" libncurses5-dev"
 PACKAGES+=" lua-lpeg"
 PACKAGES+=" lua-mpack"
 
-# Needed by packages mkvtoolnix and ruby.
+# Needed by host build of package ruby.
+PACKAGES+=" libyaml-dev"
+
+# Needed by package mkvtoolnix.
 PACKAGES+=" ruby"
 
 # Needed by host build of package nodejs.
@@ -242,6 +245,12 @@ PACKAGES+=" fontforge-nox"
 PACKAGES+=" guile-3.0"
 PACKAGES+=" python3-fontforge"
 PACKAGES+=" texlive-metapost"
+
+# Needed by package motif.
+PACKAGES+=" libfl-dev"
+PACKAGES+=" libxft-dev"
+PACKAGES+=" libxt-dev"
+PACKAGES+=" xbitmaps"
 
 # Needed by proxmark3/proxmark3-git
 PACKAGES+=" gcc-arm-none-eabi"

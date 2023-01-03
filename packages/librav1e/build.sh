@@ -2,12 +2,23 @@ TERMUX_PKG_HOMEPAGE=https://github.com/xiph/rav1e/
 TERMUX_PKG_DESCRIPTION="An AV1 encoder library focused on speed and safety"
 TERMUX_PKG_LICENSE="BSD 2-Clause"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=0.6.1
+TERMUX_PKG_VERSION=0.6.2
 TERMUX_PKG_SRCURL=https://github.com/xiph/rav1e/archive/refs/tags/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=dd12132ad9dac229ce00a9caad132c4ad23d7db2b3ad4b5a59e89658fee04d9a
+TERMUX_PKG_SHA256=8fe8d80bc80a05ee33113c0ee19779d9c57189e5434c8e1da8f67832461aa089
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+\.\d+\.\d+"
 TERMUX_PKG_BUILD_IN_SRC=true
+
+termux_step_post_get_source() {
+	# Do not forget to bump revision of reverse dependencies and rebuild them
+	# after SOVERSION is changed.
+	local _SOVERSION=0
+
+	local v=$(echo ${TERMUX_PKG_VERSION#*:} | cut -d . -f 1)
+	if [ "${v}" != "${_SOVERSION}" ]; then
+		termux_error_exit "SOVERSION guard check failed."
+	fi
+}
 
 termux_step_make_install(){
 	termux_setup_rust

@@ -84,6 +84,10 @@ termux_step_start_build() {
 		return
 	fi
 
+	if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ] && [ "$TERMUX_PKG_ON_DEVICE_BUILD_NOT_SUPPORTED" = "true" ]; then
+		termux_error_exit "Package '$TERMUX_PKG_NAME' is not available for on-device builds."
+	fi
+
 	if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
 		case "$TERMUX_APP_PACKAGE_MANAGER" in
 			"apt") apt install -y termux-elf-cleaner;;

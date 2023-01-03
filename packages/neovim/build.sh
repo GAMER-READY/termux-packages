@@ -3,10 +3,11 @@ TERMUX_PKG_DESCRIPTION="Ambitious Vim-fork focused on extensibility and agility 
 TERMUX_PKG_LICENSE="Apache-2.0, VIM License"
 TERMUX_PKG_LICENSE_FILE="LICENSE.txt"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=0.8.1
+TERMUX_PKG_VERSION=0.8.2
 TERMUX_PKG_SRCURL=https://github.com/neovim/neovim/archive/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=b4484e130aa962457189f3dee34b8481943c1e395d2d684c6f8b91598494d9ec
+TERMUX_PKG_SHA256=c516c8db73e1b12917a6b2e991b344d0914c057cef8266bce61a2100a28ffcc9
 TERMUX_PKG_AUTO_UPDATE=true
+TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+\.\d+\.\d+"
 TERMUX_PKG_DEPENDS="libiconv, libuv, luv, libmsgpack, libandroid-support, libvterm (>= 1:0.3-0), libtermkey, libluajit, libunibilium, libtreesitter"
 TERMUX_PKG_HOSTBUILD=true
 
@@ -20,6 +21,18 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -DCOMPILE_LUA=OFF
 "
 TERMUX_PKG_CONFFILES="share/nvim/sysinit.vim"
+
+termux_pkg_auto_update() {
+	# Get the latest release tag:
+	local tag
+	tag="$(termux_github_api_get_tag "${TERMUX_PKG_SRCURL}")"
+	# check if this is not a numbered release:
+	if grep -qP "^v${TERMUX_PKG_UPDATE_VERSION_REGEXP}\$" <<<"$tag"; then
+		termux_pkg_upgrade_version "$tag"
+	else
+		echo "WARNING: Skipping auto-update: Not a numbered release($tag)"
+	fi
+}
 
 _patch_luv() {
 	# git submodule update --init deps/lua-compat-5.3 failed
