@@ -1,7 +1,7 @@
 name: Build packages
 on:
   push:
-    branches: android-
+    branches: android-5
 
 jobs:
   build-for-arm:
