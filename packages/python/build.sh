@@ -29,9 +29,6 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --enable-loadable-sqlite-extensions"
 # Fix https://github.com/termux/termux-packages/issues/2236:
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" ac_cv_little_endian_double=yes"
 TERMUX_PKG_RM_AFTER_INSTALL="
-bin/idle*
-lib/python${_MAJOR_VERSION}/idlelib
-lib/python${_MAJOR_VERSION}/tkinter
 lib/python${_MAJOR_VERSION}/turtle.py
 lib/python${_MAJOR_VERSION}/turtledemo
 lib/python${_MAJOR_VERSION}/test
